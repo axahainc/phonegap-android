@@ -1491,7 +1491,6 @@ public class DroidGap extends PhonegapActivity {
       */
      class LinearLayoutSoftKeyboardDetect extends LinearLayout {
 
-            private static final String LOG_TAG = "SoftKeyboardDetect";
             
             private int oldHeight = 0;  // Need to save the old height as not to send redundant events
             private int oldWidth = 0; // Need to save old width for orientation change          
@@ -1520,23 +1519,17 @@ public class DroidGap extends PhonegapActivity {
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);       
                 
-                Log.d(LOG_TAG, "We are in our onMeasure method");
 
                 // Get the current height of the visible part of the screen.
                 // This height will not included the status bar.
                 int height = MeasureSpec.getSize(heightMeasureSpec);
                 int width = MeasureSpec.getSize(widthMeasureSpec);
                 
-                Log.d(LOG_TAG, "Old Height = " + oldHeight);
-                Log.d(LOG_TAG, "Height = " + height);          
-                Log.d(LOG_TAG, "Old Width = " + oldWidth);
-                Log.d(LOG_TAG, "Width = " + width);
                 
                 
                 // If the oldHeight = 0 then this is the first measure event as the app starts up.
                 // If oldHeight == height then we got a measurement change that doesn't affect us.
                 if (oldHeight == 0 || oldHeight == height) {
-                    Log.d(LOG_TAG, "Ignore this event");
                 }
                 // Account for orientation change and ignore this event/Fire orientation change
                 else if(screenHeight == width)
@@ -1544,18 +1537,15 @@ public class DroidGap extends PhonegapActivity {
                     int tmp_var = screenHeight;
                     screenHeight = screenWidth;
                     screenWidth = tmp_var;
-                    Log.d(LOG_TAG, "Orientation Change");
                 }
                 // If the height as gotten bigger then we will assume the soft keyboard has 
                 // gone away.
                 else if (height > oldHeight) {
-                    Log.d(LOG_TAG, "Throw hide keyboard event");
                     callbackServer.sendJavascript("PhoneGap.fireDocumentEvent('hidekeyboard');");
                 } 
                 // If the height as gotten smaller then we will assume the soft keyboard has 
                 // been displayed.
                 else if (height < oldHeight) {
-                    Log.d(LOG_TAG, "Throw show keyboard event");
                     callbackServer.sendJavascript("PhoneGap.fireDocumentEvent('showkeyboard');");
                 }
 
@@ -1609,7 +1599,6 @@ public class DroidGap extends PhonegapActivity {
       try {
         // Unlimited access to network resources
         if(origin.compareTo("*") == 0) {
-            LOG.d(TAG, "Unlimited access to network resources");
             whiteList.add(Pattern.compile("*"));
         } else { // specific access
           // check if subdomains should be included
@@ -1621,7 +1610,6 @@ public class DroidGap extends PhonegapActivity {
               } else {
                 whiteList.add(Pattern.compile("^https{0,1}://.*"+origin));
               }
-              LOG.d(TAG, "Origin to allow with subdomains: %s", origin);
           } else {
               // XXX making it stupid friendly for people who forget to include protocol/SSL
               if(origin.startsWith("http")) {
@@ -1629,11 +1617,9 @@ public class DroidGap extends PhonegapActivity {
               } else {
                 whiteList.add(Pattern.compile("^https{0,1}://"+origin));
               }
-              LOG.d(TAG, "Origin to allow: %s", origin);
           }    
         }
       } catch(Exception e) {
-        LOG.d(TAG, "Failed to add origin %s", origin);
       }
     }
 
